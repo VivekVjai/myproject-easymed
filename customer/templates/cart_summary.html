@@ -1,0 +1,80 @@
+{% extends 'base.html'%}
+
+{% load static %}
+
+{% block main_block %}
+
+    <div class="container mx-auto px-4 py-6 flex-1">
+      <h2 class="text-3xl font-bold mb-6 text-indigo-700">🛒 Your Cart</h2>
+
+      {% if cart %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for item in cart %}
+        <div class="bg-white shadow rounded-lg p-4 flex flex-col">
+          {% if item.medicine_object.image %}
+          <img
+            src="{{ item.medicine_object.image.url }}"
+            alt="{{ item.medicine_object.name }}"
+            class="w-full h-40 object-cover rounded-md mb-4"
+          />
+          {% else %}
+          <img
+            src="{% static 'medimages/defaultimage.jpg' %}"
+            alt="No image"
+            class="w-full h-40 object-cover rounded-md mb-4"
+          />
+          {% endif %}
+
+          <h3 class="text-xl font-semibold text-indigo-600">
+            {{ item.medicine_object.name }}
+          </h3>
+          <p class="text-sm text-gray-500 mt-1">
+            Category: {{ item.medicine_object.category.name }}
+          </p>
+          <p class="text-gray-700 text-sm mt-1">
+            {{ item.medicine_object.description|truncatewords:15 }}
+          </p>
+
+          <div class="mt-2 text-gray-900">
+            <p>💰 Original Price: ₹{{ item.medicine_object.price }}</p>
+            <p>🏷️ Discount: {{ item.medicine_object.discount }}%</p>
+            <p>✅ Price After Discount: ₹{{ item.discounted_price }}</p>
+          </div>
+          <form
+            method="post"
+            action="{% url 'cart_remove' item.id %}"
+            class="mt-4"
+          >
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+            >
+              🗑️ Remove
+            </button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Cart Total -->
+      <div class="mt-8 text-right">
+        <h3 class="text-xl font-bold text-indigo-800 mb-4">
+          Total(After discount): ₹{{ total }}
+        </h3>
+
+        {% if total > 0 %}
+        <form action="{% url 'checkout' %}" method="get">
+          <button
+            type="submit"
+            class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600 transition"
+          >
+            💳 Proceed to Checkout
+          </button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+{%endblock%}

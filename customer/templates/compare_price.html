@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main_block %}
+
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-extrabold text-center text-blue-700 mb-8">
+    Price Comparison for <span class="text-gray-800">{{ medicine.name }}</span>
+  </h1>
+
+  <!-- Selected Medicine Card -->
+  <div class="bg-gradient-to-r from-blue-50 to-white p-6 rounded-xl shadow-lg max-w-xl mx-auto mb-8 border border-blue-200">
+    <h2 class="text-xl font-semibold text-gray-800 mb-2">
+      Current Shop: 
+      <a href="{% url 'dealer-medlist' pk=medicine.dealer.id %}" class="text-indigo-600 hover:underline">
+        {{ medicine.dealer.owner }}
+      </a>
+    </h2>
+    <p class="text-gray-700">Price: ₹{{ medicine.price }}</p>
+    <p class="text-gray-700">Discount: {{ medicine.discount }}%</p>
+  </div>
+
+  <!-- Other Shops -->
+  <div class="max-w-3xl mx-auto">
+    <h3 class="text-lg font-bold text-gray-700 mb-4">Other Dealers Offering "{{ medicine.name }}"</h3>
+    
+    {% if same_meds %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {% for med in same_meds %}
+      <div class="bg-white border p-4 rounded-lg shadow hover:shadow-lg transition">
+        <p class="font-medium text-gray-800 mb-1">
+          <a href="{% url 'dealer-medlist' pk=med.dealer.id %}" class="text-blue-600 hover:underline">
+            {{ med.dealer.owner }}
+          </a>
+        </p>
+        <p class="text-gray-700">Price: ₹{{ med.price }}</p>
+        <p class="text-sm text-gray-500">Discount: {{ med.discount }}%</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-gray-500 text-center">No other dealers are offering this medicine at the moment.</p>
+    {% endif %}
+  </div>
+
+  <div class="mt-8 text-center">
+    <a href="{% url 'dealer-medlist' pk=medicine.dealer.id %}" class="text-indigo-600 font-medium hover:underline">
+      ← Back to {{ medicine.dealer.shop_name }}'s Shop
+    </a>
+  </div>
+</div>
+
+{% endblock %}

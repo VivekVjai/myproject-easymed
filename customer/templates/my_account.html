@@ -1,0 +1,32 @@
+<!-- my_account.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Account</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <div class="max-w-3xl mx-auto p-6 bg-white mt-10 rounded shadow-md">
+    <h1 class="text-2xl font-bold text-blue-600 mb-6">👤 My Account</h1>
+
+    <div class="space-y-3 text-gray-700">
+      <p><strong>Full Name:</strong> {{ request.user.get_full_name }}</p>
+      <p><strong>Email:</strong> {{ request.user.email }}</p>
+      <p><strong>Contact:</strong> {{ customer.contact }}</p>
+      <p><strong>Address:</strong> {{ customer.address }}</p>
+      <p><strong>PIN Code:</strong> {{ customer.pin }}</p>
+      <p><strong>Joined on:</strong> {{ customer.created_at|date:"F d, Y" }}</p>
+    </div>
+
+    <form method="POST" action="{% url 'account_delete' %}" class="mt-8">
+      {% csrf_token %}
+      <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded">
+        🗑️ Delete My Account
+      </button>
+    </form>
+  </div>
+
+</body>
+</html>

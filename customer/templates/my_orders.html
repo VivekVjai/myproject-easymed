@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main_block %}
+<div class="max-w-4xl mx-auto py-10 px-4">
+  <h2 class="text-3xl font-bold text-center text-indigo-700 mb-8">🛍️ My Orders</h2>
+
+  {% if orders %}
+    <div class="space-y-6">
+      {% for order in orders %}
+        <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200">
+          <div class="mb-4">
+            <h3 class="text-xl font-semibold text-gray-800 mb-1">Order #{{ order.id }}</h3>
+            <p class="text-sm text-gray-500">Razorpay ID: {{ order.razorpay_order_id }}</p>
+            <p class="text-sm text-green-600 mt-1 font-medium">Status: ✅ Paid</p>
+            <p class="text-md font-bold text-gray-700 mt-2">Total: ₹{{ order.total|floatformat:2 }}</p>
+          </div>
+
+          <div>
+            <h4 class="text-md font-semibold mb-2 text-gray-600">Medicines:</h4>
+            <div class="overflow-x-auto">
+              <table class="min-w-full text-left text-sm">
+                <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+                  <tr>
+                    <th class="px-4 py-2">Medicine</th>
+                    <th class="px-4 py-2">Price (₹)</th>
+                    <th class="px-4 py-2">Discount (%)</th>
+                    <th class="px-4 py-2">Final Price (₹)</th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-700 divide-y divide-gray-200">
+                  {% for medicine in order.medicine_object_cached %}
+                    <tr>
+                      <td class="px-4 py-2 font-medium">{{ medicine.name }}</td>
+                      <td class="px-4 py-2">{{ medicine.price|floatformat:2 }}</td>
+                      <td class="px-4 py-2">{{ medicine.discount }}</td>
+                      <td class="px-4 py-2">{{ medicine.final_price|floatformat:2 }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center bg-yellow-50 text-yellow-800 border border-yellow-200 p-4 rounded-lg">
+      You have no paid orders yet.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+

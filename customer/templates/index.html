@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main_block %}
+
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-r from-blue-100 to-indigo-100 py-24 overflow-hidden shadow-inner">
+  <!-- Background image -->
+  <div class="absolute inset-0">
+    <img
+      src="{% static 'images/heroimage.jpg' %}" 
+      alt="Background"
+      class="w-full h-full object-cover opacity-20"
+    />
+    <div class="absolute inset-0 bg-white bg-opacity-30"></div> 
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+    <div class="inline-flex items-center justify-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full shadow-sm text-sm font-medium mb-6">
+      <i class="fas fa-capsules mr-2"></i> Trusted • Affordable • Accessible
+    </div>
+    <h1 class="text-4xl md:text-5xl font-extrabold text-blue-900 mb-4 leading-snug">
+      Your Trusted Online Medicine Partner
+    </h1>
+    <h2 class="text-xl md:text-2xl text-blue-800 font-medium mb-6">
+      Welcome, {{ request.user }}
+    </h2>
+    <p class="text-lg text-gray-700 max-w-2xl mx-auto mb-8">
+      Search and compare quality medicines from verified dealers near you.
+    </p>
+    <a
+      href="{% url 'dealer-list' %}"
+      class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition duration-300"
+    >
+      Browse Medicines
+    </a>
+  </div>
+</section>
+
+
+
+<!-- Main Content Area -->
+<main class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
+
+  <!-- Categories -->
+  <section class="md:col-span-2">
+    <h3 class="text-2xl font-bold text-gray-800 mb-6">💊 Browse Categories</h3>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+      {% for category in categories %}
+      <a href="{% url 'medicines_by_category' category.id %}" class="block bg-white p-6 rounded-xl shadow hover:shadow-lg hover:bg-blue-50 text-center transition">
+        <span class="text-lg font-medium text-blue-700">{{ category.name }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Chatbot -->
+  <aside class="bg-white p-6 rounded-xl shadow-md flex flex-col justify-between h-[500px]">
+    <div>
+      <h4 class="text-xl font-semibold text-blue-600 mb-4 flex items-center gap-2">
+        💬 Chat Support
+      </h4>
+      <div id="chat-box" class="bg-gray-100 p-4 rounded-lg h-[340px] overflow-y-auto text-sm space-y-2 shadow-inner">
+        <div class="text-gray-700">👋 Hi! How can I help you today?</div>
+      </div>
+    </div>
+    <form id="chat-form" class="mt-4 flex">
+      <input
+        type="text"
+        id="chat-input"
+        placeholder="Type your message..."
+        class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button
+        type="submit"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition"
+      >
+        Send
+      </button>
+    </form>
+  </aside>
+
+</main>
+
+{% endblock %}
+

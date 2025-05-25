@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block main_block %}
+<section class="container mx-auto mt-8">
+  <h3 class="text-xl font-semibold mb-6">Medicines in {{ category.name }}</h3>
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-6">
+    {% for medicine in medicines %}
+      <div class="bg-white rounded-lg shadow p-4 text-center">
+        {% if medicine.image %}
+          <img src="{{ medicine.image.url }}" alt="{{ medicine.name }}" class="w-full h-32 object-contain mb-2" />
+        {% endif %}
+        <h4 class="font-bold text-md text-gray-700">{{ medicine.name }}</h4>
+        <p class="text-gray-600 text-sm">{{ medicine.description|truncatechars:60 }}</p>
+        <p class="text-green-600 font-semibold mt-2">₹{{ medicine.price }}</p>
+        <p class="text-sm text-gray-500">Discount: {{ medicine.discount }}%</p>
+      </div>
+    {% empty %}
+      <p>No medicines available in this category.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

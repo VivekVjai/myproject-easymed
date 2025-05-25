@@ -1,0 +1,41 @@
+{% extends 'base.html'%} {%load static%} {%block main_block%}
+
+<div class="container mx-auto p-6">
+  <h1 class="text-3xl font-bold mb-6 text-center text-indigo-800">
+    All Dealers
+  </h1>
+
+  {% if dealer_list %}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for dealer in dealer_list %}
+    <div
+      class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300"
+    >
+      <h2 class="text-xl font-semibold text-indigo-700 mb-2">
+        {{ dealer.owner }} {{" medicals"}}
+      </h2>
+      <p class="text-sm text-gray-700">
+        <strong>Phone:</strong> {{ dealer.phone }}
+      </p>
+      <p class="text-sm text-gray-700">
+        <strong>Location:</strong> {{ dealer.location }}
+      </p>
+      <p class="text-sm text-gray-700">
+        <strong>Email:</strong> {{ dealer.owner.email }}
+      </p>
+
+      <a
+        href="{% url 'dealer-medlist' dealer.owner.id %}"
+        class="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl shadow hover:bg-indigo-700 transition"
+      >
+        View Medicines
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-center text-gray-500">No dealers found.</p>
+  {% endif %}
+</div>
+
+{%endblock%}

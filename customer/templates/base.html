@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gradient-to-br from-gray-100 to-white font-sans">
+    <!-- Navbar -->
+    <nav
+      class="bg-gradient-to-r from-blue-700 to-indigo-600 fixed top-0 w-full z-50 shadow-lg"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center"
+      >
+        <a
+          href="{% url 'home' %}"
+          class="text-white text-3xl font-bold tracking-wide flex items-center gap-2"
+        >
+          💊 EasyMed
+        </a>
+
+        <div class="flex items-center gap-4">
+          <ul class="hidden md:flex gap-6 text-white text-sm font-semibold">
+            <li>
+              <a href="{% url 'home' %}" class="hover:text-indigo-200">Home</a>
+            </li>
+            <li>
+              <a href="{% url 'dealer-list' %}" class="hover:text-indigo-200"
+                >Dealers</a
+              >
+            </li>
+            <li>
+              <a href="{% url 'orders' %}" class="hover:text-indigo-200"
+                >Orders</a
+              >
+            </li>
+          </ul>
+
+          <!-- Cart -->
+          <a
+            href="{% url 'cart_summary' %}"
+            class="relative text-white text-lg"
+          >
+            <i class="fas fa-shopping-cart"></i>
+            <span
+              class="absolute -top-2 -right-2 text-xs bg-red-500 rounded-full w-5 h-5 flex items-center justify-center"
+            >
+              {{ request.user.basket.all.count }}
+            </span>
+          </a>
+
+          <!-- Logout -->
+          <a
+            href="{% url 'sign-out' %}"
+            class="text-white hover:underline text-sm font-medium"
+            >Logout</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    {% if messages %}
+    <div class="container mt-3">
+      {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show text-center"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="pt-28 pb-12 px-6">
+      <div class="max-w-7xl mx-auto">{% block main_block %}{% endblock %}</div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="bg-gradient-to-r from-blue-700 to-indigo-600 text-white text-center py-6"
+    >
+      <p class="text-sm font-medium">
+        &copy; 2025 MedApp. All rights reserved.
+      </p>
+    </footer>
+  </body>
+</html>
