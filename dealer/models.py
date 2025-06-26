@@ -72,7 +72,7 @@ class Medicine(models.Model):
     updated_at=models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.name} - {self.dealer.first_name}"
+        return f"{self.name} - {self.dealer.owner.first_name}"
 
 class Cart(models.Model):
 
@@ -82,8 +82,10 @@ class Cart(models.Model):
 
     created_at=models.DateTimeField(auto_now=True)
 
+    quantity=models.PositiveIntegerField(default=1)
+
     def __str__(self):
-        return self.medicine_object.name
+        return f"{self.medicine_object.name} ({self.quantity})"
     
 class Order(models.Model):
 

@@ -15,7 +15,7 @@
   <body class="bg-gradient-to-br from-gray-100 to-white font-sans">
     <!-- Navbar -->
     <nav
-      class="bg-gradient-to-r from-blue-700 to-indigo-600 fixed top-0 w-full z-50 shadow-lg"
+      class="bg-gradient-to-br from-indigo-700 via-blue-600 to-purple-700 bg-opacity-90 backdrop-blur-md shadow-xl rounded-b-2xl fixed top-0 left-0 w-full z-50 transition-all duration-300"
     >
       <div
         class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center"
@@ -24,21 +24,33 @@
           href="{% url 'home' %}"
           class="text-white text-3xl font-bold tracking-wide flex items-center gap-2"
         >
-          💊 EasyMed
+          💊
+          <span
+            class="bg-white/20 px-3 py-1 rounded-xl shadow text-sm font-semibold"
+            >EasyMed</span
+          >
         </a>
 
-        <div class="flex items-center gap-4">
-          <ul class="hidden md:flex gap-6 text-white text-sm font-semibold">
+        <div class="flex items-center gap-6">
+          <ul class="hidden md:flex gap-6 text-white text-sm font-medium">
             <li>
-              <a href="{% url 'home' %}" class="hover:text-indigo-200">Home</a>
+              <a
+                href="{% url 'home' %}"
+                class="hover:text-yellow-300 transition"
+                >Home</a
+              >
             </li>
             <li>
-              <a href="{% url 'dealer-list' %}" class="hover:text-indigo-200"
+              <a
+                href="{% url 'dealer-list' %}"
+                class="hover:text-yellow-300 transition"
                 >Dealers</a
               >
             </li>
             <li>
-              <a href="{% url 'orders' %}" class="hover:text-indigo-200"
+              <a
+                href="{% url 'orders' %}"
+                class="hover:text-yellow-300 transition"
                 >Orders</a
               >
             </li>
@@ -47,7 +59,7 @@
           <!-- Cart -->
           <a
             href="{% url 'cart_summary' %}"
-            class="relative text-white text-lg"
+            class="relative text-white text-lg hover:text-yellow-300 transition"
           >
             <i class="fas fa-shopping-cart"></i>
             <span
@@ -61,8 +73,9 @@
           <a
             href="{% url 'sign-out' %}"
             class="text-white hover:underline text-sm font-medium"
-            >Logout</a
           >
+            Logout
+          </a>
         </div>
       </div>
     </nav>
@@ -101,5 +114,13 @@
         &copy; 2025 MedApp. All rights reserved.
       </p>
     </footer>
+    <script>
+      function adjustQty(btn, delta) {
+        const input = btn.parentElement.querySelector('input[name="quantity"]');
+        let value = parseInt(input.value) || 1;
+        value = Math.max(1, value + delta);
+        input.value = value;
+      }
+    </script>
   </body>
 </html>

@@ -8,10 +8,6 @@
   <div class="bg-gray-50 p-4 rounded border mb-6">
     <h3 class="text-lg font-semibold mb-2">🧾 Order Summary</h3>
     <p class="text-gray-600">
-      <strong>User:</strong> {{
-      request.user.first_name|default:request.user.username }}
-    </p>
-    <p class="text-gray-600">
       <strong>Email:</strong> {{ request.user.email }}
     </p>
     <p class="text-gray-600">
@@ -21,6 +17,25 @@
       Total: ₹{{ amount|floatformat:2 }}
     </p>
   </div>
+  <hr class="my-4" />
+
+  {% for item in cart_items %}
+  <div class="flex justify-between items-center mb-2 text-sm text-gray-700">
+    <div>
+      <p class="font-semibold">{{ item.medicine_object.name }}</p>
+      <p class="text-xs text-gray-500">Quantity: {{ item.quantity }}</p>
+      <p class="text-xs text-gray-500">
+        Unit Price: ₹{{ item.discounted_price }}
+      </p>
+    </div>
+    <div class="font-bold text-right">₹{{ item.total_price }}</div>
+  </div>
+  {% endfor %}
+
+  <hr class="my-4" />
+  <p class="text-lg font-semibold text-indigo-700 text-right">
+    🧾 Total Payable: ₹{{ amount|floatformat:2 }}
+  </p>
 
   <!-- Payment Button -->
   <div class="text-center">

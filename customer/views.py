@@ -133,10 +133,16 @@ class AddtoCartView(View):
         id=kwargs.get("pk")
 
         medicine_instance=get_object_or_404(Medicine,id=id)
+        quantity=int(request.POST.get("quantity",1))
 
         cart_instance,created=Cart.objects.get_or_create(
             medicine_object=medicine_instance,
-            user=request.user)
+            user=request.user,
+            defaults={"quantity":quantity})
+        
+        if not created:
+            cart_instance.quantity += quantity
+            cart_instance.save()
 
         return redirect("dealer-list") 
 
@@ -158,29 +164,34 @@ class ComparePrice(View):
 
 
 @method_decorator(signin_required,name="dispatch")
+@method_decorator(signin_required, name="dispatch")
 class CartSummaryView(View):
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
 
-        cart_items=Cart.objects.filter(user=request.user).select_related("medicine_object")
+        cart_items = Cart.objects.filter(user=request.user).select_related("medicine_object")
 
-        total=0
+        total = 0
 
         for item in cart_items:
+            price = item.medicine_object.price
+            discount = item.medicine_object.discount
+            quantity = item.quantity  
 
-            price=item.medicine_object.price
+            discounted_price = price - (price * discount / 100)
+            total_price = discounted_price * quantity  
 
-            discount=item.medicine_object.discount
+            item.discounted_price = round(discounted_price, 2)
+            item.total_price = round(total_price, 2) 
 
-            discounted_price=price - (price*discount/100)
+            total += total_price
 
-            item.discounted_price = round(discounted_price,2)
+        context = {
+            "cart": cart_items,
+            "total": round(total, 2)
+        }
 
-            total+=item.discounted_price
-
-        context={"cart":cart_items,"total":round(total,2)}
-
-        return render(request,"cart_summary.html",context)
+        return render(request, "cart_summary.html", context)
 
 
 @method_decorator(signin_required,name="dispatch")
@@ -218,9 +229,13 @@ class CheckOutview(View):
 
             discounted_price=price - (price*discount/100)
 
-            item.discounted_price = round(discounted_price,2)
+            item_total = discounted_price * item.quantity
 
-            order_total+=item.discounted_price    
+            item.discounted_price = round(discounted_price, 2)
+
+            item.total_price = round(item_total, 2)
+
+            order_total+=item_total
 
         if order_total ==0:
             return redirect("cart_summary")
@@ -247,6 +262,7 @@ class CheckOutview(View):
 
         context={
             "order":order_instance,
+            "cart_items": cart_items,
             "razorpay_key":settings.RAZORPAY_KEY_ID,
             "amount":order_total,
             "razorpay_order_id":razorpay_order['id'],
